@@ -371,6 +371,20 @@
 						}
 					};
 				</script>
+				<script>
+	var list = document.getElementById('soundholder');
+	var template = [
+		'<a class="soundbtn">',
+		' <div class="soundbtn-inner">',
+		'  <img src="{{name}}.png">',
+		'  <audio>',
+		'   <source src="sounds/{{name}}.wav" type="audio/wav">',
+		'  </audio>',
+		'  <div style="margin:80px 0 0 0;">{{counter}}</div>',
+		' </div>',
+		'</a>'].join('');
+	console.log(template);
+				</script>
 				<div id="clients"></div>
 </body>
 
