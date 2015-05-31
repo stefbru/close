@@ -30,6 +30,7 @@ function nameExists(name) {
 }
 
 function coerceName(name) {
+	name = String(name);
 	if (!nameExists(name))
 		return name;
 	var index = 2;
@@ -65,6 +66,15 @@ wss.on('connection', function(client) {
 					name: client.name,
 					emoji: client.emoji
 				}, true);
+				break;
+
+			case 'move':
+				broadcast({
+					action: 'move',
+					name: client.name,
+					x: +message.x,
+					y: +message.y
+				});
 				break;
 		}
 	});

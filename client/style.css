@@ -330,3 +330,12 @@ and (max-width : 600px) {
 
 #content.Data .master-button{margin-top:-28px;}
 }
+
+.pointer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 12px;
+	height: 19px;
+	background: url('images/pointer.png') no-repeat -10px -6px;
+}

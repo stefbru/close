@@ -58,6 +58,27 @@ function html(text) {
 		.replace(/"/g, '&quot;');
 }
 
+function throttle(fn, threshhold, scope) {
+	threshhold || (threshhold = 250);
+	var last, deferTimer;
+	return function () {
+		var context = scope || this;
+		var now = +new Date,
+		args = arguments;
+		if (last && now < last + threshhold) {
+			// hold on to it
+			clearTimeout(deferTimer);
+			deferTimer = setTimeout(function () {
+				last = now;
+				fn.apply(context, args);
+			}, threshhold);
+		} else {
+			last = now;
+			fn.apply(context, args);
+		}
+	};
+}
+
 function initButtons() {
 	var list = document.getElementById('soundholder');
 	var template = [
@@ -141,6 +162,13 @@ function initWebSocket() {
 						// x: 0,
 						// y: 0
 				}));
+				window.onmousemove = throttle(function(e) {
+					ws.send(JSON.stringify({
+						action: 'move',
+						x: e.pageX,
+						y: e.pageY
+					}));
+				}, 10);
 				break;
 			case 'connect':
 				// someone connected, add him to the list
@@ -156,7 +184,19 @@ function initWebSocket() {
 					'<span class="emoji">', html(player.emoji), '</span>',
 					'<b>', html(player.name), '</b>'
 				].join('');
-				ul.appendChild(li)
+				ul.appendChild(li);
+				break;
+			case 'move':
+				var player = players[message.name];
+				var pointer = document.getElementById('pointer-' + player.id);
+				if (pointer == null) {
+					pointer = document.createElement('div');
+					pointer.id = 'pointer-' + player.id;
+					pointer.className = 'pointer';
+					document.body.appendChild(pointer);
+				}
+				pointer.style.left = message.x + 'px';
+				pointer.style.top = message.y + 'px';
 				break;
 			case 'disconnect':
 				// someone disconnected, remove him from the list
