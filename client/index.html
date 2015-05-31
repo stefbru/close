@@ -107,7 +107,7 @@ function initButtons() {
 		html.push(itemHtml);
 	}
 	list.innerHTML = html.join('\n');
-	list.onclick = function(e) {
+	list.addEventListener('click', function(e) {
 		for (var tgt = e.target; tgt; tgt = tgt.parentNode) {
 			if (tgt.classList && tgt.classList.contains('soundbtn')) {
 				var audio = tgt.querySelector('audio');
@@ -117,7 +117,7 @@ function initButtons() {
 				break;
 			}
 		}
-	};
+	}, false);
 }
 
 function initWebSocket() {
