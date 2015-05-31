@@ -149,7 +149,7 @@ function initWebSocket() {
 	var emoji = "";
 	var gif = "";
 	var players = {};
-	var ws = new WebSocket('ws://localhost:5000');
+	var ws = new WebSocket('ws://' + location.hostname + ':5000');
 	ws.onmessage = function(e) {
 		var message = JSON.parse(e.data);
 		switch (message.action) {
