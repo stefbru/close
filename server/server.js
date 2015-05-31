@@ -76,6 +76,14 @@ wss.on('connection', function(client) {
 					y: +message.y
 				});
 				break;
+
+			case 'play':
+				broadcast({
+					action: 'play',
+					name: client.name,
+					sound: String(message.sound)
+				});
+				break;
 		}
 	});
 

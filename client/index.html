@@ -82,7 +82,7 @@ function throttle(fn, threshhold, scope) {
 function initButtons() {
 	var list = document.getElementById('soundholder');
 	var template = [
-		'<a class="soundbtn">',
+		'<a class="soundbtn" id="soundbtn-{{counter}}">',
 		' <div class="soundbtn-inner">',
 		'  <img src="images/{{image}}">',
 		'  <audio>',
@@ -143,6 +143,7 @@ function initButtons() {
 
 function initWebSocket() {
 	var ul = document.getElementById('num-players');
+	var soundHolder = document.getElementById('soundholder');
 	var clientId = 0;
 	var name = "";
 	var emoji = "";
@@ -169,6 +170,17 @@ function initWebSocket() {
 						y: e.pageY
 					}));
 				}, 10);
+				soundHolder.addEventListener('click', function(e) {
+					for (var tgt = e.target; tgt; tgt = tgt.parentNode) {
+						if (tgt.classList && tgt.classList.contains('soundbtn')) {
+							ws.send(JSON.stringify({
+								action: 'play',
+								sound: tgt.id
+							}));
+							break;
+						}
+					}
+				}, false);
 				break;
 			case 'connect':
 				// someone connected, add him to the list
@@ -197,6 +209,15 @@ function initWebSocket() {
 				}
 				pointer.style.left = message.x + 'px';
 				pointer.style.top = message.y + 'px';
+				break;
+			case 'play':
+				var btn = document.getElementById(message.sound);
+				if (btn.classList && btn.classList.contains('soundbtn')) {
+					var audio = btn.querySelector('audio');
+					audio.pause();
+					audio.currentTime = 0;
+					audio.play();
+				}
 				break;
 			case 'disconnect':
 				// someone disconnected, remove him from the list
