@@ -170,7 +170,8 @@ function initWebSocket() {
 						y: e.pageY
 					}));
 				}, 10);
-				soundHolder.addEventListener('click', function(e) {
+				var proxyClick;
+				soundHolder.addEventListener('click', proxyClick = function(e) {
 					for (var tgt = e.target; tgt; tgt = tgt.parentNode) {
 						if (tgt.classList && tgt.classList.contains('soundbtn')) {
 							ws.send(JSON.stringify({
@@ -181,6 +182,10 @@ function initWebSocket() {
 						}
 					}
 				}, false);
+				ws.onclose = function() {
+					window.onmousemove = null;
+					soundHolder.removeEventListener('click', proxyClick);
+				};
 				break;
 			case 'connect':
 				// someone connected, add him to the list
