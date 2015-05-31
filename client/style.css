@@ -15,7 +15,7 @@ a {
 	cursor: auto;
 }
 
-a img { border: none; 
+a img { border: none;
 }
 
 .runner{
@@ -308,4 +308,27 @@ and (max-width : 600px) {
 #content.Data h1{margin-top:0!important;padding-left:5px!important;}
 
 #content.Data .master-button{margin-top:-28px;}
+}
+
+.pointer {
+	position: absolute;
+	pointer-events: none;
+	top: 0;
+	left: 0;
+	width: 12px;
+	height: 19px;
+	background: url('images/pointer.png') no-repeat -10px -6px;
+}
+
+video#bgvid {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	min-width: 100%;
+	min-height: 100%;
+	width: auto;
+	height: auto;
+	z-index: -100;
+	-webkit-transform: translateX(-50%) translateY(-50%);
+	transform: translateX(-50%) translateY(-50%);
 }
