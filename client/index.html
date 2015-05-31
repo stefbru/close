@@ -109,7 +109,7 @@ function initButtons() {
 	list.innerHTML = html.join('\n');
 	list.onclick = function(e) {
 		for (var tgt = e.target; tgt; tgt = tgt.parentNode) {
-			if (tgt.classList.contains('soundbtn')) {
+			if (tgt.classList && tgt.classList.contains('soundbtn')) {
 				var audio = tgt.querySelector('audio');
 				audio.pause();
 				audio.currentTime = 0;
