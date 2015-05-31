@@ -158,6 +158,8 @@
 		for (var tgt = e.target; tgt; tgt = tgt.parentNode) {
 			if (tgt.classList.contains('soundbtn')) {
 				var audio = tgt.querySelector('audio');
+				audio.pause();
+				audio.currentTime = 0;
 				audio.play();
 				break;
 			}
