@@ -154,6 +154,15 @@
 		html.push(itemHtml);
 	}
 	list.innerHTML = html.join('\n');
+	list.onclick = function(e) {
+		for (var tgt = e.target; tgt; tgt = tgt.parentNode) {
+			if (tgt.classList.contains('soundbtn')) {
+				var audio = tgt.querySelector('audio');
+				audio.play();
+				break;
+			}
+		}
+	}
 			</script>
 			<div id="clients"></div>
 		</div>
