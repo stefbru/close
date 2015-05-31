@@ -48,64 +48,17 @@
 				<a href="http://s-c-n.biz/" target="_blank">Simone Niquille</a>
 			</footer>
 			<script>
-				var ul = document.getElementById('num-players');
-				var clientId = 0;
-				var name = "";
-				var emoji = "";
-				var gif = "";
-				var players = {};
-				var ws = new WebSocket('ws://localhost:5000');
+function html(text) {
+	if (!text)
+		return '';
+	return text
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;');
+}
 
-				function html(text) {
-					if (!text)
-						return '';
-					return text
-						.replace(/&/g, '&amp;')
-						.replace(/</g, '&lt;')
-						.replace(/>/g, '&gt;')
-						.replace(/"/g, '&quot;');
-				}
-				ws.onmessage = function(e) {
-					var message = JSON.parse(e.data);
-					switch (message.action) {
-						case 'hello':
-							name = prompt("What is your name?");
-							ws.send(JSON.stringify({
-								action: 'connect',
-								name: name
-									// id: rid,
-									// color: cl,
-									// x: 0,
-									// y: 0
-							}));
-							break;
-						case 'connect':
-							// someone connected, add him to the list
-							var player = players[message.name] = {
-								name: message.name,
-								emoji: message.emoji,
-								id: ++clientId
-							};
-							var li = document.createElement('li');
-							li.id = 'player-' + player.id;
-							li.innerHTML = [
-								'<img src="images/runningman.gif" />',
-								'<span class="emoji">', html(player.emoji), '</span>',
-								'<b>', html(player.name), '</b>'
-							].join('');
-							ul.appendChild(li)
-							break;
-						case 'disconnect':
-							// someone disconnected, remove him from the list
-							var player = players[message.name];
-							delete players[message.name];
-							var el = document.getElementById('player-' + player.id);
-							el.parentNode.removeChild(el);
-							break;
-					}
-				};
-			</script>
-			<script>
+function initButtons() {
 	var list = document.getElementById('soundholder');
 	var template = [
 		'<a class="soundbtn">',
@@ -164,7 +117,60 @@
 				break;
 			}
 		}
-	}
+	};
+}
+
+function initWebSocket() {
+	var ul = document.getElementById('num-players');
+	var clientId = 0;
+	var name = "";
+	var emoji = "";
+	var gif = "";
+	var players = {};
+	var ws = new WebSocket('ws://localhost:5000');
+	ws.onmessage = function(e) {
+		var message = JSON.parse(e.data);
+		switch (message.action) {
+			case 'hello':
+				name = prompt("What is your name?");
+				ws.send(JSON.stringify({
+					action: 'connect',
+					name: name
+						// id: rid,
+						// color: cl,
+						// x: 0,
+						// y: 0
+				}));
+				break;
+			case 'connect':
+				// someone connected, add him to the list
+				var player = players[message.name] = {
+					name: message.name,
+					emoji: message.emoji,
+					id: ++clientId
+				};
+				var li = document.createElement('li');
+				li.id = 'player-' + player.id;
+				li.innerHTML = [
+					'<img src="images/runningman.gif" />',
+					'<span class="emoji">', html(player.emoji), '</span>',
+					'<b>', html(player.name), '</b>'
+				].join('');
+				ul.appendChild(li)
+				break;
+			case 'disconnect':
+				// someone disconnected, remove him from the list
+				var player = players[message.name];
+				delete players[message.name];
+				var el = document.getElementById('player-' + player.id);
+				el.parentNode.removeChild(el);
+				break;
+		}
+	};
+}
+
+initButtons();
+initWebSocket();
 			</script>
 			<div id="clients"></div>
 		</div>
